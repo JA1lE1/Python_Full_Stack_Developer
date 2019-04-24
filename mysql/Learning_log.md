@@ -4,7 +4,7 @@
 
 ## *2019年4月18日*
 
-## Mysql
+### Mysql
 
 ### Ubuntu 环境下
 
@@ -51,3 +51,20 @@ dpkg -l |grep ^rc|awk '{print $2}' |sudo xargs dpkg -P
 
 
 
+## 2019.4.22
+
+### 创建含有中文字段的表
+
+- 在创建数据库时使用utf8？
+
+  ```sql
+  create database python04new charset=utf8;
+  ```
+
+- unsigned 就不包括0？
+
+- ```
+  insert into XXXXX values()// alter table XXXX add(modify，change drop) //select * from// create table XXXX //desc XXXX //这里XXXX 均为表名
+  ```
+
+- 

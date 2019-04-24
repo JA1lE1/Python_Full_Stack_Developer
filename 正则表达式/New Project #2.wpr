@@ -1,0 +1,14 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.directory-list = [{'dirloc': loc('.'),
+                        'excludes': [u'01-\u5224\u65ad\u53d8\u91cf\u540d\u662f\u5426\u7b26\u5408\u8981\u6c42.py'],
+                        'filter': '*',
+                        'include_hidden': False,
+                        'recursive': True,
+                        'watch_for_changes': True}]
+proj.file-list = [loc('01-\xe5\x88\xa4\xe6\x96\xad\xe5\x8f\x98\xe9\x87\x8f\xe5\x90\x8d\xe6\x98\xaf\xe5\x90\xa6\xe7\xac\xa6\xe5\x90\x88\xe8\xa6\x81\xe6\xb1\x82.py')]
+proj.file-type = 'shared'
