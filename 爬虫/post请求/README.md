@@ -1,5 +1,158 @@
 # 有道翻译爬虫
 
+-------
+
+2019.4.29
+
+---------------
+
+- 不看上次笔记自行练习一次，再对比笔记查缺补漏
+
+## Review
+
+### 代码之前的分析
+
+\1. 需求:爬取有道词典的翻译返回值，当然是有输入(post请求)的前提下
+
+\2. 通过在有道翻译主页键入你好在chrome浏览器查找的Network中找到transxxx的请求，
+
+\3. Header 中 Request Method：POST,请求参数均在Headers中，只是有hash加密方式
+
+\4. 在Response中找到对应的json,确实有对应的hello，也就是只用post方式正确，提取Response的json中对应的值即可
+
+\5. 可以通过对比发现在post请求的From Data中 salt，sign，ts，bv均是 需求“查找”(反爬)的加密内容
+
+\6. 反爬机制一般可以在js文件中找到，这里在Sources中居然直接找到-fanyi.mini.js了！（不知道其他的在线翻译是怎样的机制）
+
+\7. 在fanyi.mini.js中同时找到ts,bv,salt,sign的有关加密内容。打断点debug查看加密方法的raw_data
+
+\8. sign:(""fanyideskweb" + e + i + "@6f#X3=cCuncYssPsuRUE""), 其中e是请求翻译的内容（输入值） i是
+
+​    e = 输入请求值
+
+​    t = n.md5("5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36")
+
+​    r = "" + (new Date).getTime()
+
+​    i = r + parseInt(10 * Math.random(), 10);
+
+​    \# 需将以上的js内容翻译成python代码
+
+​    ts = r  ## 应该是实时时间
+
+​    bv = t  ## 应该是客户端信息的md5加密
+
+​    salt = i ## 应该是实时时间+随机数
+
+
+
+
+
+### 遇到的问题
+
+- 请求需要get还是直接post，post里面是只有fromdata还是url+headers+from_data
+  - 这里我瞧了一眼代码，它把所有的Headers都加进去了，准确的说是Request_Headers
+  - ==疑问==
+    - ==如果我需要大量的请求，那么我应该要有其他的cookie或者是代理防止被封，如何？==
+  
+- ==字符串的输出==
+
+  - 将它作为元组传递：
+
+    ```python
+    print("Total score for %s is %s  " % (name, score))
+    ```
+
+    或使用新样式字符串格式：
+
+    ```python
+    print("Total score for {} is {}".format(name, score))
+    ```
+
+    或者传递值作为参数，打印将做它：
+
+    ```python
+    print("Total score for", name, "is", score)
+    ```
+
+    如果不希望通过打印自动插入空格，请更改sep参数：
+
+    ```python
+    print("Total score for ", name, " is ", score, sep='')
+    ```
+
+  - ==我比较习惯用"sdasfs{}".format(xxxx) 这种方法==
+
+#### 代码解读
+
+```python
+        sign = hashlib.md5(('fanyideskweb' + input_info + salt + '1L5ja}w$puC.v_Kz3@yYn').encode('utf-8')).hexdigest()  # 获取Post请求的sign参数
+
+```
+
+- 这个地方为什么需要encode？
+  - ==str.encode('utf-8')的返回值是bytes类型?==
+- 什么使用用encode，什么使用用decode?
+
+### hashlib
+
+- 字符串
+
+  - +b + u +r
+    - [参考](<https://blog.csdn.net/qq_16234613/article/details/79448203>)
+      - 这个参考也可作为字符串之间的转换
+
+- ==输入参数必须是b+'str'?== 转成bytes类型？
+
+  - ```python
+    type(b'str')
+    <class 'bytes'>
+    ```
+
+  
+  - ```python
+    type('str'.encode('utf-8'))
+    <class 'bytes'>
+    ```
+  
+  - 
+
+
+
+### get
+
+- 字典元素之间需要加=='逗号'== ，==最后一个元素需要加逗号吗？==
+
+### request
+
+- r(response)
+  - r.content :point_right: 二进制内容
+  - r.text :point_right: 获取响应内容
+- ==自带的json方法貌似不带好用==
+  - 使用json.loads(r.text)来解决
+
+### json
+
+- json.loads 和json.load 有什么区别？
+
+
+### Debug
+
+- result
+  {'errorCode': 50}
+
+#### 经验
+
+- 参数
+  - 所以这个在设置参数的时候要格外注意，特别是代码拥有居多参数
+  - 参数的格式错误
+  - 编码问题
+  - 可能前后不一致，code的过程中很有可能思路有了变化
+
+
+
+---
+
 ## 源
 - [本代码fork地址](https://github.com/a15572775981/youdao/blob/master/youdao_crawler.py)
 ## 问题
