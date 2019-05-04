@@ -1,6 +1,26 @@
 # Learning_log
 
+##  2018.4.29
 
+### 基于mysql 官方文档
+
+- [链接](<http://www.searchdoc.cn/rdbms/mysql/dev.mysql.com/doc/refman/5.7/en/entering-queries.com.coder114.cn.html>)
+
+```sql
+mysql> SELECT
+    -> USER()
+    -> ,
+    -> CURRENT_DATE;
++---------------+--------------+
+| USER()        | CURRENT_DATE |
++---------------+--------------+
+| jon@localhost | 2010-08-06   |
++---------------+--------------+
+```
+
+- 注意==逗号==将并行为1个表格输出
+- 结束查询
+- mysql所处的状态含义
 
 ## *2019年4月18日*
 

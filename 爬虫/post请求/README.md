@@ -8,6 +8,19 @@
 
 - 不看上次笔记自行练习一次，再对比笔记查缺补漏
 
+## GOOGLE TRANSLATE
+
+- Query String Parameters
+
+  - tk
+
+    - 40745.395229
+    - 518878.94762
+
+  - elements下的js
+
+    - <script src="/translate/releases/twsfe_w_20190422_RC01/r/js/translate_m.js"></script>
+
 ## Review
 
 ### 代码之前的分析
@@ -98,7 +111,7 @@
 
 - 字符串
 
-  - +b + u +r
+  - ==+b + u +r==
     - [参考](<https://blog.csdn.net/qq_16234613/article/details/79448203>)
       - 这个参考也可作为字符串之间的转换
 
@@ -115,9 +128,33 @@
     <class 'bytes'>
     ```
   
-  - 
+- ==hashlib md5 的原理依然一窍不通==
 
+### python 基础
 
+- ```
+  print( random.randint(1,10) )        # 产生 1 到 10 的一个整数型随机数 
+  ```
+
+- ```
+  >>>a = input("input:")
+  input:123                  # 输入整数
+  >>> type(a)
+  <type 'int'>               # 整型
+  >>> a = input("input:")    
+  input:"runoob"           # 正确，字符串表达式
+  >>> type(a)
+  <type 'str'>             # 字符串
+  >>> a = input("input:")
+  input:runoob               # 报错，不是表达式
+  Traceback (most recent call last):
+    File "<stdin>", line 1, in <module>
+    File "<string>", line 1, in <module>
+  NameError: name 'runoob' is not defined
+  <type 'str'>
+  ```
+
+- time module的用法
 
 ### get
 
@@ -134,6 +171,7 @@
 ### json
 
 - json.loads 和json.load 有什么区别？
+- ==json还是不熟悉==
 
 
 ### Debug
