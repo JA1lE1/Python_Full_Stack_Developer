@@ -1,0 +1,367 @@
+{% extends "basic.html" %}
+
+{% block title %}首页{% endblock %}
+
+{% block head %}
+{{ super() }}
+<!-- 第三方插件 -->
+<link href={{ url_for('static',filename="css/plugins/footable/footable.core.css") }} rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>信息抽取-<strong>关键字提取</strong></h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">主页</a>
+            </li>
+            <li>
+                <strong>关键字提取</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-8">
+        <div class="title-action">
+            <a href="main.html" class="btn btn-primary">打开主页</a>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>文件上传</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="page-container">
+                        <span class="btn btn-success fileinput-button">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                <span>选择文件</span>
+                                <input type="file" name="myfile">
+                        </span>
+                        <button onclick="upload_file();" id="btn_upload" class="btn btn-primary btn-sm ">
+                            <i class="glyphicon glyphicon-upload"></i>
+                            <span>上传</span>
+                        </button>
+                        <span>&nbsp;&nbsp;目前仅支持文件类型：<strong>txt，csv</strong>&nbsp;&nbsp;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>输入数据</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="page-container">
+                        <!--tfidf-->
+                        <!--textrank-->
+                        <!--lda-->
+                        <textarea id="input_area" class="form-control" placeholder="输入文本数据......"
+                                  style="margin: 0px -2px 0px 0px;height: 150px;resize: none"></textarea>
+
+                        <div class="hr-line-dashed"></div>
+                        <h3>
+                            设置结果显示数目
+                        </h3>
+                        <input id="ionrange1"></input>
+                        <div class="hr-line-dashed"></div>
+                        <h3>
+                            设置语种类型
+                        </h3>
+                        <div class="form-group">
+                            <div class="radio radio-info radio-inline">
+                                <input id="zh1" type="radio" checked value="chinese" name="language"
+                                       class="checkbox checkbox-success"><label for="zh1"><strong>中文</strong></label>
+                            </div>
+                            <span>&nbsp;&nbsp;</span>
+                            <div class="radio radio-info radio-inline">
+                                <input id="en1" type="radio" value="english" name="language"
+                                       class="checkbox checkbox-success"><label for="en1"><strong>英文</strong> </label>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <h3>
+                            设置实现算法
+                        </h3>
+                        <div class="form-group">
+                            <div class="radio radio-info radio-inline">
+                                <input id="tfidf" type="radio" checked value="tfidf" name="alogrithm"
+                                       class="checkbox checkbox-success"><label for="tfidf"><strong>TF-IDF</strong> </label>
+                            </div>
+                            <span>&nbsp;&nbsp;</span>
+                            <div class="radio radio-info radio-inline">
+                                <input id="textrank" type="radio" value="textrank" name="alogrithm"
+                                       class="checkbox"><label for="textrank"><strong>TextRank</strong> </label>
+                            </div>
+                        </div>
+                    </div>
+                    <a onclick="process();" style="margin-right: 20px;" class="btn btn-primary pull-right">开始处理</a>
+                    <p>&nbsp;</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div id="myloading" hidden class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <h3 style="color: #7266ba">
+                        正在处理,请稍后......
+                    </h3>
+                    <div class="page-container">
+                        <center><img src={{url_for('static',filename="img/loading.svg")}}/></center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>输出结果</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="page-container">
+                        <div class="ibox float-e-margins">
+                            <div id="myoutput" class="ibox-content">
+                                <table id="mytable" class="footable table table-bordered" data-page-size="10">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>KeyWord</th>
+                                        <th>Weight</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="mytbody">
+                                    <tr>
+                                        <td>暂无数据</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tfoot>
+                                    <tr>
+                                        <td colspan="5">
+                                            <ul class="pagination pull-right"></ul>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+{% endblock %}
+{% block footer %}
+{{ super() }}
+
+
+<!--数据下载-->
+<script src={{ url_for('static',filename="js/plugins/footable/footable.all.min.js") }}></script>
+
+<script >
+var input_type = 0 //0: textarea,1:file
+
+window.onload = function () {
+    $('.footable').footable();
+}
+
+function upload_file() {
+    var files = $('input[name="myfile"]').prop('files');//获取到文件列表
+    var file = files[0];
+    if (file == undefined) {
+        swal({
+            title: "提示信息",
+            type: "warning",
+            showCancelButton: false,
+            confirmButtonColor: '#DD6B55',
+            text: "第一步：先选择一个文本文件！"
+        });
+    }
+    else {
+        var form = new FormData();
+        form.append('myfile', file);
+        $.ajax({
+            url: "/BITIE/upload",
+            type: "post",
+            data: form,
+            timeout: 30000,//10s
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                upload_callback(data);
+            },
+            error: function (XMLHttpRequest, status) { //求完成后最终执行参数
+                swal({
+                    title: "错误信息",
+                    type: "error",
+                    showCancelButton: false,
+                    confirmButtonColor: '#DD6B55',
+                    text: "status:" + XMLHttpRequest.status + " textinfo:" + status
+                });
+                $("#myloading").hide();
+            }
+        });
+    }
+}
+
+function upload_callback(data) {
+    if (data['status']) {
+        swal({
+            title: "上传成功",
+            type: "success",
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 900
+        })
+        //阻塞，同步
+        setTimeout(function () {
+            //控制前台展示的文本数量
+            if (data['text'].length > 1000) {
+                show_text = data['text'].slice(0, 1000)
+                show_text += "\n......未完全显示......"
+            } else {
+                show_text = data['text']
+            }
+            $('#input_area').val(show_text);
+        }, 1000);
+        input_type = 1;
+
+    } else {
+        swal({
+            title: "错误信息",
+            type: "error",
+            showCancelButton: false,
+            confirmButtonColor: '#DD6B55',
+            text: data['desc']
+        });
+    }
+}
+
+function process() {
+    $('#mytbody').html('');
+    var text = $('#input_area').val();
+    var show_num = $("#ionrange1").val();
+    var algorithm = $('input[name="alogrithm"]:checked').val();
+    var language = $('input[name="language"]:checked').val();
+
+    if (text == "" && input_type=='0') {
+        swal({
+            title: "提示信息",
+            type: "warning",
+            showCancelButton: false,
+            confirmButtonColor: '#DD6B55',
+            text: "请上传文件或输入数据！"
+        });
+    } else {
+        var form = new FormData();
+        if(input_type=='0')
+            form.append("text", text)//输入
+        else
+            form.append("text", '')//导入
+        form.append("show_num", parseInt(show_num))
+        form.append("alogrithm", algorithm)
+        form.append("language", language)
+        form.append("input_type", input_type)
+
+        $.ajax({
+            url: "/BITIE/keyword_extract",
+            type: "post",
+            data: form,
+            timeout: 30000,//10s
+            cache: false,
+            processData: false,
+            contentType: false,
+            beforeSend: function () {
+                $("#myloading").show();
+            },
+            success: function (data) {
+                $("#myloading").hide();
+                process_callback(data);
+            },
+            error: function (XMLHttpRequest, status) { //求完成后最终执行参数
+                $("#myloading").hide();
+                swal({
+                    title: "错误信息",
+                    type: "error",
+                    showCancelButton: false,
+                    confirmButtonColor: '#DD6B55',
+                    text: "status:" + XMLHttpRequest.status + " textinfo:" + status
+                });
+            }
+        });
+    }
+}
+
+function process_callback(data) {
+    var status = data['status']
+    result = data['result']
+    if (status) {
+        show_output(result);
+    } else {
+        swal({
+            title: "错误信息",
+            type: "error",
+            showCancelButton: false,
+            confirmButtonColor: '#DD6B55',
+            text: '不好意思，服务器出故障了！'
+        });
+    }
+}
+
+function show_output(data) {
+    if (typeof (data) != "object" || data == null || data == undefined) {
+        swal({
+            title: "错误信息",
+            type: "error",
+            showCancelButton: false,
+            confirmButtonColor: '#DD6B55',
+            text: '输出结果类型有问题！'
+        });
+        return;
+    }
+    //成功之后
+    input_type = 0;
+    $('#input_area').val('');
+    var html = "";
+    if (data.length == 0) {
+        html += "<tr>\n" +
+            "<td>暂无数据</td>\n" +
+            "<td></td>\n" +
+            "<td></td>\n" +
+            "</tr>"
+    } else {
+        $.each(data, function (i, v) {
+            html += "<tr>\n" +
+                "<td>" + parseInt(i + 1) + "</td>\n" +
+                "<td>" + v.toString().split(',')[0] + "</td>\n" +
+                "<td>" + v.toString().split(',')[1] + "</td>\n" +
+                "</tr>"
+        });
+    }
+    $('#mytbody').append(html);
+}
+
+</script>
+{% endblock %}

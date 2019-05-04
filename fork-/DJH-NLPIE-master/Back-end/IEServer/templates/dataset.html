@@ -1,0 +1,105 @@
+{% extends "basic.html" %}
+
+{% block title %}首页{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <!-- 第三方插件 -->
+    <link href={{ url_for('static',filename="css/plugins/footable/footable.core.css") }} rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-4">
+            <h2>常用-<strong>数据集下载</strong></h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="index.html">主页</a>
+                </li>
+                <li>
+                    <strong>数据集下载</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-sm-8">
+            <div class="title-action">
+                <a href="main.html" class="btn btn-primary">打开主页</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>常用数据集</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="10">
+                        <thead>
+                        <tr>
+                            <th data-toggle="true">数据集</th>
+                            <th>类型</th>
+                            <th data-hide="all">特征数</th>
+                            <th data-hide="all">实例数</th>
+                            <th data-hide="all">简介</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>spambase</td>
+                            <td>classification</td>
+                            <td>属性：56</td>
+                            <td>实例：4601</td>
+                            <td>垃圾邮件分类数据</td>
+                            <td><a href="/BITIE/download/spambase.data"><i class="fa fa-download"></i> 下载</a></td>
+                        </tr>
+                        <tr>
+                            <td>sougou_news</td>
+                            <td>classification</td>
+                            <td>类别</td>
+                            <td>实例</td>
+                            <td>搜狗实验室新闻分类数据</td>
+                            <td><a href="/BITIE/download/sougou.rar"><i class="fa fa-download"></i> 下载</a></td>
+                        </tr>
+                        <tr>
+                            <td>维基百科中文词向量模型</td>
+                            <td>classification</td>
+                            <td>维度：300</td>
+                            <td>实例：最新维基百科中文语聊（约1.5G）</td>
+                            <td>gensim训练好的维基百科中文词向量模型</td>
+                            <td><a href="/BITIE/download/wiki_zh300.model.bin"><i class="fa fa-download"></i> 下载</a></td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="5">
+                                <ul class="pagination pull-right"></ul>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    <!-- 全局js -->
+    <script src={{ url_for('static',filename="js/jquery.min.js")}}></script>
+    <script src={{ url_for('static',filename="js/bootstrap.min.js")}}></script>
+    <!-- 自定义js -->
+    <script src={{ url_for('static',filename="js/content.js")}}></script>
+    <!-- 自定义js -->
+    <script src={{ url_for('static',filename="js/content.js") }}></script>
+    <!--数据下载-->
+    <script src={{ url_for('static',filename="js/plugins/footable/footable.all.min.js") }}></script>
+    <!-- 自定义js -->
+    <script src={{ url_for('static',filename="js/content.js") }}></script>
+    <script>
+        $(document).ready(function () {
+            $('.footable').footable();
+        });
+    </script>
+{% endblock %}
