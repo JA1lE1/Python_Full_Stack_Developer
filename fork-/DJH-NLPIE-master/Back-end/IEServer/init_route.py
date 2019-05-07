@@ -1,4 +1,4 @@
-#!/usr/bin/python
+################## !/usr/bin/python
 # -*- coding: utf-8 -*-
 """
 -------------------------------------------------
@@ -29,15 +29,15 @@ __dir__ = ['404.html', '500.html', 'main.html', 'index.html', 'keyword.html', 'm
 logger = Logger(isclean=True).get_logger()
 
 
-@app.before_request
-def before_request():
-	ip = request.remote_addr
-	url = request.url
-	logger.info('ip = {} , url = {}.'.format(ip, url))
-	extension = url.rsplit('.', 1)[1].lower()
-	filter_resource = set(['png.', 'jpg.', 'js.', 'css.'])
-	if extension not in filter_resource:
-		logger.info('ip = {} , url = {}.'.format(ip, url))
+# @app.before_request
+# def before_request():
+# 	ip = request.remote_addr
+# 	url = request.url
+# 	logger.info('ip = {} , url = {}.'.format(ip, url))
+# 	extension = url.rsplit('.', 1)[1].lower()
+# 	filter_resource = set(['png.', 'jpg.', 'js.', 'css.'])
+# 	if extension not in filter_resource:
+# 		logger.info('ip = {} , url = {}.'.format(ip, url))
 
 
 @app.errorhandler(404)
@@ -54,7 +54,7 @@ def server_interval(error):
 首页的右侧内部页面定义
 '''
 
-
+# @app.route('/')    # 临时添加
 @app.route('/BITIE/main.html')
 def main():
 	return render_template('main.html')
@@ -158,7 +158,7 @@ def dataset():
 	'''
 	return render_template('dataset.html')
 
-
+# @app.route('/')    # 临时添加
 @app.route('/BITIE')
 @app.route('/BITIE/')
 @app.route('/BITIE/index')
